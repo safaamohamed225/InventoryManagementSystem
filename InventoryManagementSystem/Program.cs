@@ -1,130 +1,160 @@
-﻿namespace InventoryManagementSystem
+﻿using System;
+using System.Collections.Generic;
+
+namespace InventoryManagementSystem
 {
     internal class Program
     {
+        static List<Product> products = new List<Product>();
 
-        const int MaxProducts = 100;
-        static string[,] products = new string[MaxProducts, 3];
-        static int productCount = 0;
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to my inventory management system!..");
+            Console.WriteLine("Welcome to the Inventory Management System!");
 
             while (true)
             {
-                Console.WriteLine("============================================\n");
-                Console.WriteLine("Enter your choice from the following list:\n");
-                Console.WriteLine("1. Add a new product");
-                Console.WriteLine("2. View all products");
-                Console.WriteLine("3. Update a product");
-                Console.WriteLine("4. Delete a product");
-                Console.WriteLine("5. Exit");
+                ShowMenu();
 
-                int userChoice = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Enter your choice: ");
+                string input = Console.ReadLine()!;
 
-                switch (userChoice)
+                switch (input)
                 {
-                    case 1:
-                        Console.WriteLine("You chose to add a new product.");
+                    case "1":
                         AddProduct();
                         break;
-                    case 2:
-                        Console.WriteLine("You chose to view all products.");
+                    case "2":
                         ViewProducts();
                         break;
-                    case 3:
-                        Console.WriteLine("You chose to update a product.");
+                    case "3":
                         UpdateProduct();
                         break;
-                    case 4:
-                        Console.WriteLine("You chose to delete a product.");
+                    case "4":
                         DeleteProduct();
                         break;
-                    case 5:
-                        Console.WriteLine("Exiting the program. Goodbye!");
-                        Environment.Exit(0);
-                        break;
+                    case "5":
+                        Console.WriteLine("Exiting program... Goodbye!");
+                        return;
+
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;
                 }
 
+                Console.WriteLine();
             }
         }
 
-        private static void AddProduct()
+        static void ShowMenu()
         {
-            Console.WriteLine("Enter product name:");
-            string productName = Console.ReadLine()!;
-
-            Console.WriteLine("Enter product price:");
-            decimal productPrice = Convert.ToDecimal(Console.ReadLine());
-
-            Console.WriteLine("Enter product quantity:");
-            int productQuantity = Convert.ToInt32(Console.ReadLine());
-
-            products[productCount, 0] = productName;
-            products[productCount, 1] = productPrice.ToString();
-            products[productCount, 2] = productQuantity.ToString();
-
-            productCount++;
-
-            Console.WriteLine($"Product '{productName}' added successfully with price {productPrice} and quantity {productQuantity}.");
+            Console.WriteLine("\n=======================================");
+            Console.WriteLine("1. Add a new product");
+            Console.WriteLine("2. View all products");
+            Console.WriteLine("3. Update a product");
+            Console.WriteLine("4. Delete a product");
+            Console.WriteLine("5. Exit");
+            Console.WriteLine("=======================================\n");
         }
 
-        private static void ViewProducts()
+        static void AddProduct()
         {
-            if (productCount == 0)
+            Console.Write("Enter product name: ");
+            string name = Console.ReadLine()!;
+
+            Console.Write("Enter product price: ");
+            if (!decimal.TryParse(Console.ReadLine(), out decimal price))
+            {
+                Console.WriteLine("Invalid price!");
+                return;
+            }
+
+            Console.Write("Enter product quantity: ");
+            if (!int.TryParse(Console.ReadLine(), out int quantity))
+            {
+                Console.WriteLine("Invalid quantity!");
+                return;
+            }
+
+            products.Add(new Product(name, price, quantity));
+            Console.WriteLine($"Product '{name}' added successfully!");
+        }
+
+        static void ViewProducts()
+        {
+            if (products.Count == 0)
             {
                 Console.WriteLine("No products available.");
                 return;
             }
-            Console.WriteLine("Product List:");
-            Console.WriteLine("-------------");
-            for (int i = 0; i < productCount; i++)
+
+            Console.WriteLine("\n--- Product List ---");
+            for (int i = 0; i < products.Count; i++)
             {
-                Console.WriteLine($" ID: {i + 1}, Name: {products[i, 0]}, Price: {products[i, 1]}, Quantity: {products[i, 2]}");
+                Console.WriteLine(
+                    $"ID: {i + 1} | Name: {products[i].Name} | Price: {products[i].Price} | Qty: {products[i].Quantity}");
             }
         }
 
-        private static void DeleteProduct()
+        static void UpdateProduct()
         {
-            Console.WriteLine("Enter the ID of the product to delete:");
-            int productId = Convert.ToInt32(Console.ReadLine());
-            if (productId < 1 || productId > productCount)
+            Console.Write("Enter product ID to update: ");
+            if (!int.TryParse(Console.ReadLine(), out int id) || id < 1 || id > products.Count)
             {
-                Console.WriteLine("Invalid product ID.");
+                Console.WriteLine("Invalid ID!");
                 return;
             }
-            for (int i = productId - 1; i < productCount - 1; i++)
+
+            var product = products[id - 1];
+
+            Console.Write("Enter new product name: ");
+            string newName = Console.ReadLine()!;
+
+            Console.Write("Enter new price: ");
+            if (!decimal.TryParse(Console.ReadLine(), out decimal newPrice))
             {
-                products[i, 0] = products[i + 1, 0];
-                products[i, 1] = products[i + 1, 1];
-                products[i, 2] = products[i + 1, 2];
-            }
-            productCount--;
-            Console.WriteLine($"Product with ID {productId} deleted successfully.");
-        }
-        private static void UpdateProduct()
-        {
-            Console.WriteLine("Enter the ID of the product to update:");
-            int productId = Convert.ToInt32(Console.ReadLine());
-            if (productId < 1 || productId > productCount)
-            {
-                Console.WriteLine("Invalid product ID.");
+                Console.WriteLine("Invalid price!");
                 return;
             }
-            Console.WriteLine("Enter new product name:");
-            string newProductName = Console.ReadLine()!;
-            Console.WriteLine("Enter new product price:");
-            decimal newProductPrice = Convert.ToDecimal(Console.ReadLine());
-            Console.WriteLine("Enter new product quantity:");
-            int newProductQuantity = Convert.ToInt32(Console.ReadLine());
-            products[productId - 1, 0] = newProductName;
-            products[productId - 1, 1] = newProductPrice.ToString();
-            products[productId - 1, 2] = newProductQuantity.ToString();
-            Console.WriteLine($"Product with ID {productId} updated successfully to Name: {newProductName}, Price: {newProductPrice}, Quantity: {newProductQuantity}.");
+
+            Console.Write("Enter new quantity: ");
+            if (!int.TryParse(Console.ReadLine(), out int newQty))
+            {
+                Console.WriteLine("Invalid quantity!");
+                return;
+            }
+
+            product.Name = newName;
+            product.Price = newPrice;
+            product.Quantity = newQty;
+
+            Console.WriteLine("Product updated successfully!");
         }
 
+        static void DeleteProduct()
+        {
+            Console.Write("Enter product ID to delete: ");
+            if (!int.TryParse(Console.ReadLine(), out int id) || id < 1 || id > products.Count)
+            {
+                Console.WriteLine("Invalid ID!");
+                return;
+            }
+
+            products.RemoveAt(id - 1);
+            Console.WriteLine("Product deleted successfully!");
+        }
+    }
+
+    class Product
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+
+        public Product(string name, decimal price, int quantity)
+        {
+            Name = name;
+            Price = price;
+            Quantity = quantity;
+        }
     }
 }
