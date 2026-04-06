@@ -34,7 +34,7 @@
                         break;
                     case 3:
                         Console.WriteLine("You chose to update a product.");
-                        //UpdateProduct();
+                        UpdateProduct();
                         break;
                     case 4:
                         Console.WriteLine("You chose to delete a product.");
@@ -105,6 +105,26 @@
             productCount--;
             Console.WriteLine($"Product with ID {productId} deleted successfully.");
         }
-        
+        private static void UpdateProduct()
+        {
+            Console.WriteLine("Enter the ID of the product to update:");
+            int productId = Convert.ToInt32(Console.ReadLine());
+            if (productId < 1 || productId > productCount)
+            {
+                Console.WriteLine("Invalid product ID.");
+                return;
+            }
+            Console.WriteLine("Enter new product name:");
+            string newProductName = Console.ReadLine()!;
+            Console.WriteLine("Enter new product price:");
+            decimal newProductPrice = Convert.ToDecimal(Console.ReadLine());
+            Console.WriteLine("Enter new product quantity:");
+            int newProductQuantity = Convert.ToInt32(Console.ReadLine());
+            products[productId - 1, 0] = newProductName;
+            products[productId - 1, 1] = newProductPrice.ToString();
+            products[productId - 1, 2] = newProductQuantity.ToString();
+            Console.WriteLine($"Product with ID {productId} updated successfully to Name: {newProductName}, Price: {newProductPrice}, Quantity: {newProductQuantity}.");
+        }
+
     }
 }
