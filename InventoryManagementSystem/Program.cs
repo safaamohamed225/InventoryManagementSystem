@@ -3,9 +3,9 @@
     internal class Program
     {
 
-         const int MaxProducts = 100;
-         static string[,] products = new string[MaxProducts,3];
-         static int productCount = 0;
+        const int MaxProducts = 100;
+        static string[,] products = new string[MaxProducts, 3];
+        static int productCount = 0;
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to my inventory management system!..");
@@ -34,14 +34,15 @@
                         break;
                     case 3:
                         Console.WriteLine("You chose to update a product.");
-                        // Code to update a product goes here
+                        //UpdateProduct();
                         break;
                     case 4:
                         Console.WriteLine("You chose to delete a product.");
-                        // Code to delete a product goes here
+                        DeleteProduct();
                         break;
                     case 5:
                         Console.WriteLine("Exiting the program. Goodbye!");
+                        Environment.Exit(0);
                         break;
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
@@ -73,7 +74,7 @@
 
         private static void ViewProducts()
         {
-            if(productCount == 0)
+            if (productCount == 0)
             {
                 Console.WriteLine("No products available.");
                 return;
@@ -82,8 +83,28 @@
             Console.WriteLine("-------------");
             for (int i = 0; i < productCount; i++)
             {
-                Console.WriteLine($" ID: {i+1}, Name: {products[i, 0]}, Price: {products[i, 1]}, Quantity: {products[i, 2]}");
+                Console.WriteLine($" ID: {i + 1}, Name: {products[i, 0]}, Price: {products[i, 1]}, Quantity: {products[i, 2]}");
             }
         }
+
+        private static void DeleteProduct()
+        {
+            Console.WriteLine("Enter the ID of the product to delete:");
+            int productId = Convert.ToInt32(Console.ReadLine());
+            if (productId < 1 || productId > productCount)
+            {
+                Console.WriteLine("Invalid product ID.");
+                return;
+            }
+            for (int i = productId - 1; i < productCount - 1; i++)
+            {
+                products[i, 0] = products[i + 1, 0];
+                products[i, 1] = products[i + 1, 1];
+                products[i, 2] = products[i + 1, 2];
+            }
+            productCount--;
+            Console.WriteLine($"Product with ID {productId} deleted successfully.");
+        }
+        
     }
 }
