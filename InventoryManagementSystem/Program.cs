@@ -9,46 +9,46 @@
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to my inventory management system!..");
-            Console.WriteLine("============================================\n");
 
-            Console.WriteLine("Enter your choice from the following list:\n");
-
-            Console.WriteLine("1. Add a new product");
-            Console.WriteLine("2. View all products");
-            Console.WriteLine("3. Update a product");
-            Console.WriteLine("4. Delete a product");
-            Console.WriteLine("5. Exit");
-
-            int userChoice = Convert.ToInt32(Console.ReadLine());
-
-            switch (userChoice)
+            while (true)
             {
-                case 1:
-                    Console.WriteLine("You chose to add a new product.");
-                    AddProduct();
-                    break;
-                case 2:
-                    Console.WriteLine("You chose to view all products.");
-                    // Code to view all products goes here
-                    break;
-                case 3:
-                    Console.WriteLine("You chose to update a product.");
-                    // Code to update a product goes here
-                    break;
-                case 4:
-                    Console.WriteLine("You chose to delete a product.");
-                    // Code to delete a product goes here
-                    break;
-                case 5:
-                    Console.WriteLine("Exiting the program. Goodbye!");
-                    break;
-                default:
-                    Console.WriteLine("Invalid choice. Please try again.");
-                    break;
+                Console.WriteLine("============================================\n");
+                Console.WriteLine("Enter your choice from the following list:\n");
+                Console.WriteLine("1. Add a new product");
+                Console.WriteLine("2. View all products");
+                Console.WriteLine("3. Update a product");
+                Console.WriteLine("4. Delete a product");
+                Console.WriteLine("5. Exit");
+
+                int userChoice = Convert.ToInt32(Console.ReadLine());
+
+                switch (userChoice)
+                {
+                    case 1:
+                        Console.WriteLine("You chose to add a new product.");
+                        AddProduct();
+                        break;
+                    case 2:
+                        Console.WriteLine("You chose to view all products.");
+                        ViewProducts();
+                        break;
+                    case 3:
+                        Console.WriteLine("You chose to update a product.");
+                        // Code to update a product goes here
+                        break;
+                    case 4:
+                        Console.WriteLine("You chose to delete a product.");
+                        // Code to delete a product goes here
+                        break;
+                    case 5:
+                        Console.WriteLine("Exiting the program. Goodbye!");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+
             }
-
-
-
         }
 
         private static void AddProduct()
@@ -69,6 +69,21 @@
             productCount++;
 
             Console.WriteLine($"Product '{productName}' added successfully with price {productPrice} and quantity {productQuantity}.");
+        }
+
+        private static void ViewProducts()
+        {
+            if(productCount == 0)
+            {
+                Console.WriteLine("No products available.");
+                return;
+            }
+            Console.WriteLine("Product List:");
+            Console.WriteLine("-------------");
+            for (int i = 0; i < productCount; i++)
+            {
+                Console.WriteLine($" ID: {i+1}, Name: {products[i, 0]}, Price: {products[i, 1]}, Quantity: {products[i, 2]}");
+            }
         }
     }
 }
